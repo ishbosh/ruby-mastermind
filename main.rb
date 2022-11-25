@@ -10,16 +10,41 @@ module MasterMind
     def initialize
       @player = Player.new
       @computer = Computer.new
-      play
+      game_setup
     end
     
-    def play
+    def game_setup
       @code = computer.generate_code
-      @guess = player.guess
+      @guess = ''
+      play
+    end
+
+    def play
+      game_loop
+    end
+    
+    def game_loop
+      until player.guesses == 0 || correct?(guess)
+        self.guess = player.guess
+      end
     end
 
     # check the guess
-    def correct?
+    def compare_to_code(guess)
+      
+      code_array = code.chars.each_with_index.to_a
+      guess_array = guess.chars.each_with_index.to_a
+
+      differences = code_array - guess_array
+      correct_positions = code_array - differences
+      
+      total_correct = code.chars.intersection(guess.chars).count
+      wrong_positions = total_correct - correct_positions.count
+      
+      [correct_positions, wrong_positions]
+    end
+
+    def correct?(guess)
       code.eql?(guess)
     end
 
