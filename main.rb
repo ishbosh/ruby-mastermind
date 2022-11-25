@@ -17,7 +17,7 @@ module MasterMind
     end
     
     def game_setup
-      @code = computer.generate_code
+      @code = computer.generate_code.freeze
       @guess = ''
       play
     end
@@ -77,22 +77,20 @@ module MasterMind
     end
 
     def guess
+      show_guess_number(guesses)
       self.guesses -= 1
       guess = input
     end
 
-    def input(guess = '', input_count = 0)
-      while input_count < 4
-        print show_guess_prompt(input_count + 1)
-        input = gets.chomp.to_i
-        if [*1..6].include?(input)
-          input_count += 1
-          guess += input.to_s
-        else
-          puts show_guess_error
-        end
+    def input(input = '')
+      print show_guess_prompt
+      loop do
+        input = gets.chomp.slice(0...4).to_s
+        break if input.chars.all? { |char| [*1..6].include?(char.to_i)}
+
+        puts show_guess_error
       end
-      guess
+      input
     end
 
   end

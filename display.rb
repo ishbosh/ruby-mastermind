@@ -1,10 +1,14 @@
 module DisplayText
-  def show_guess_prompt(n)
-    "Guess digit ##{n}:  "
+  def show_guess_prompt
+    'Guess 4 digit code with each digit in the range 1-6:  '
   end
 
   def show_guess_error
-    "\nInvalid guess. Must be a single digit 1 through 6."
+    "\nInvalid guess. Each digit must be 1 through 6."
+  end
+
+  def show_guess_number(n)
+    "- Guess Number #{n} -"
   end
 
   def show_feedback(feedback)
@@ -18,5 +22,6 @@ module DisplayText
   def show_victory(code)
     "You did it! The code was: #{code}"
   end
+
 
 end
