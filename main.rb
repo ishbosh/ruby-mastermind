@@ -49,19 +49,14 @@ module MasterMind
       feedback
     end
 
-    # check the guess
     def compare_to_code(guess)
       code_array = code.chars.each_with_index.to_a
       guess_array = guess.chars.each_with_index.to_a
-
       correct = guess_array & code_array
-      differences = code_array - guess_array
-
+      differences = guess_array - code_array
       correct_digits = correct.map { |array| array.first }
       close_digits = (guess.chars & code.chars) - correct_digits
-
       close = close_digits.map { |digit| differences.assoc(digit) }
-      # or return feedback here??
       [correct, close]
     end
 
