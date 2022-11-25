@@ -31,33 +31,37 @@ module MasterMind
         self.guess = player.guess
         break if correct?(guess)
         
-        correct, close = compare_to_code(guess)
-        puts 'Guess Feedback: ' + show_feedback(feedback(correct, close))
+        correct, misplaced = compare_to_code(guess)
+        puts 'Guess Feedback: ' + show_feedback(feedback(correct, misplaced))
         game_over if player.guesses == 0
       end
       puts show_victory(code) if correct?(guess)
     end
 
     def game_over
-      puts show_game_over
+      puts show_game_over(code)
     end
 
-    def feedback(correct, close)
-      feedback = ['-','-','-','-']
-      correct.each { |digit| feedback[digit[1]] = 'o'}
-      close.each { |digit| feedback[digit[1]] = 'x' }
+    def feedback(correct_count, misplaced_count, feedback = ['-','-','-','-'])
+      feedback.each_with_index do |val, i|
+        if correct_count > 0
+          feedback[i] = 'o' 
+          correct_count -= 1
+        elsif feedback[i] == '-' && misplaced_count > 0 
+          feedback[i] = 'x'
+          misplaced_count -= 1
+        end
+      end
       feedback
     end
 
     def compare_to_code(guess)
       code_array = code.chars.each_with_index.to_a
       guess_array = guess.chars.each_with_index.to_a
+      total_correct = code.chars.intersection(guess.chars).count
       correct = guess_array & code_array
-      differences = guess_array - code_array
-      correct_digits = correct.map { |array| array.first }
-      close_digits = (guess.chars & code.chars) - correct_digits
-      close = close_digits.map { |digit| differences.assoc(digit) }
-      [correct, close]
+      misplaced_count = total_correct - correct.count
+      [correct.count, misplaced_count]
     end
 
     def correct?(guess)
