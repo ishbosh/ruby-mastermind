@@ -5,7 +5,10 @@ require_relative 'display'
 module MasterMind
   
   class Game
-    attr_reader :computer, :player, :code, :guess
+    include DisplayText
+
+    attr_reader :computer, :player, :code
+    attr_accessor :guess
 
     def initialize
       @player = Player.new
@@ -24,24 +27,42 @@ module MasterMind
     end
     
     def game_loop
-      until player.guesses == 0 || correct?(guess)
+      until player.guesses == 0
         self.guess = player.guess
+        break if correct?(guess)
+        
+        correct, close = compare_to_code(guess)
+        puts 'Guess Feedback: ' + show_feedback(feedback(correct, close))
+        game_over if player.guesses == 0
       end
+      puts show_victory(code) if correct?(guess)
+    end
+
+    def game_over
+      puts show_game_over
+    end
+
+    def feedback(correct, close)
+      feedback = ['-','-','-','-']
+      correct.each { |digit| feedback[digit[1]] = 'o'}
+      close.each { |digit| feedback[digit[1]] = 'x' }
+      feedback
     end
 
     # check the guess
     def compare_to_code(guess)
-      
       code_array = code.chars.each_with_index.to_a
       guess_array = guess.chars.each_with_index.to_a
 
+      correct = guess_array & code_array
       differences = code_array - guess_array
-      correct_positions = code_array - differences
-      
-      total_correct = code.chars.intersection(guess.chars).count
-      wrong_positions = total_correct - correct_positions.count
-      
-      [correct_positions, wrong_positions]
+
+      correct_digits = correct.map { |array| array.first }
+      close_digits = (guess.chars & code.chars) - correct_digits
+
+      close = close_digits.map { |digit| differences.assoc(digit) }
+      # or return feedback here??
+      [correct, close]
     end
 
     def correct?(guess)
