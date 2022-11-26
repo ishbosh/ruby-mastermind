@@ -110,9 +110,5 @@ module MasterMind
     end
   end
 
-  ## Do we need a separate class for the board?
-  class Board
-  end
-
   Game.new
 end

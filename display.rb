@@ -1,4 +1,14 @@
 module DisplayText
+
+  def show_intro
+    "  --- MASTERMIND ----" \
+    " Can you crack the code?"
+  end
+
+  def show_intro_prompt
+    "Do you want to be Code Breaker, or Code Maker? Type in Break or Make."
+  end
+
   def show_guess_prompt
     'Guess 4 digit code with each digit in the range 1-6:  '
   end
