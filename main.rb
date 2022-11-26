@@ -53,9 +53,9 @@ module MasterMind
       end
     end
 
-    def reset_guess
+    def reset_guesses
       @guess = ''
-      @breaker.guesses = 12
+      breaker.guesses = 12
     end
 
     def create_code

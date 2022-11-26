@@ -2,7 +2,7 @@ module DisplayText
 
   def show_intro
     "  --- MASTERMIND ----" \
-    " Can you crack the code?"
+    "\n Can you crack the code?"
   end
 
   def show_role_prompt
