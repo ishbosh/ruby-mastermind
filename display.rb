@@ -6,7 +6,11 @@ module DisplayText
   end
 
   def show_intro_prompt
-    "Do you want to be Code Breaker, or Code Maker? Type in Break or Make."
+    "Do you want to be Code Breaker, or Code Maker? Type in 'Break' or 'Make'."
+  end
+
+  def show_intro_error
+    "Invalid input. Enter 'break' or 'make'. "
   end
 
   def show_guess_prompt
@@ -32,6 +36,4 @@ module DisplayText
   def show_victory(code)
     "You did it! The code was: #{code}"
   end
-
-
 end

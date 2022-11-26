@@ -16,6 +16,12 @@ module MasterMind
       game_setup
     end
     
+    def intro
+      puts show_intro
+      puts show_intro_prompt
+      decision = player.intro_input
+    end
+
     def game_setup
       @code = computer.generate_code.freeze
       @guess = ''
@@ -78,21 +84,35 @@ module MasterMind
     
     def initialize
       @guesses = 12
+      @role = ['break']
     end
 
     def guess
       show_guess_number(guesses)
       self.guesses -= 1
-      guess = input
+      guess = guess_input
     end
 
-    def input(input = '')
+    def guess_input
+      input = ''
       print show_guess_prompt
       loop do
         input = gets.chomp.slice(0...4).to_s
         break if input.chars.all? { |char| [*1..6].include?(char.to_i)}
 
         puts show_guess_error
+      end
+      input
+    end
+
+    def intro_input
+      valid_answers = ['break', 'make']
+      input = 'break'
+      loop do
+        input = gets.chomp.downcase
+        break if valid_answers.include?(input)
+
+        puts show_intro_error
       end
       input
     end
