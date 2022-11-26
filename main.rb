@@ -27,13 +27,15 @@ module MasterMind
     end
 
     def game_setup
+      player_name
       define_roles
       reset_guesses
       create_code
     end
 
     def player_name
-      player.name = gets.chomp
+      player.name = gets.chomp.strip.downcase.capitalize
+      player.name = 'You' if player.name.empty?
     end
 
     def define_roles
@@ -81,11 +83,11 @@ module MasterMind
     end
 
     def victory
-      puts show_victory(code)
+      puts show_victory(code, breaker.name)
     end
 
     def game_over
-      puts show_game_over(code)
+      puts show_game_over(code, breaker.name)
     end
 
     def feedback(correct_count, misplaced_count, feedback = ['-','-','-','-'])

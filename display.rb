@@ -13,6 +13,10 @@ module DisplayText
     "Invalid input. Enter 'break' or 'make'. "
   end
 
+  def show_name_prompt
+    "Enter your name: "
+  end
+
   def show_guess_prompt
     'Guess 4 digit code with each digit in the range 1-6:  '
   end
