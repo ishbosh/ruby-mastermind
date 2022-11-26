@@ -17,27 +17,37 @@ module DisplayText
     "Enter your name: "
   end
 
+  def show_code_prompt
+    'Choose a 4 digit code with each digit in the range 1-6: '
+  end
+
   def show_guess_prompt
     'Guess 4 digit code with each digit in the range 1-6:  '
   end
 
-  def show_guess_error
-    "\nInvalid guess. Each digit must be 1 through 6."
+  def show_computer_guess(guess)
+    "Computer Guesses: #{guess}"
   end
 
-  def show_guess_number(n)
-    "- Guess Number #{n} -"
+  def show_invalid_error
+    "\nInvalid entry. Each digit must be 1 through 6."
+  end
+
+  def show_turn_number(n)
+    "- Turn Number #{n} -"
   end
 
   def show_feedback(feedback)
-    "#{feedback.join}"
+    "Guess Feedback: #{feedback.join}\n "
   end
 
-  def show_game_over(code, breaker)
-    "Game over man, game over! You couldn't crack the code! It was: #{code}"
+  def show_game_over(code, breaker, maker)
+    "Game over man, game over! " \
+    "#{breaker} couldn't crack #{maker}'s code! It was #{code}"
   end
 
-  def show_victory(code, breaker)
-    "#{breaker} successfully cracked the code! It was: #{code}"
+  def show_victory(code, breaker, maker)
+    "Sweet, sweet victory! " \
+    "#{breaker} successfully cracked #{maker}'s code! It was #{code}"
   end
 end
