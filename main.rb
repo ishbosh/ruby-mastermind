@@ -36,6 +36,7 @@ module MasterMind
     end
 
     def player_name
+      print show_name_prompt
       player.name = gets.chomp.strip.downcase.capitalize
       player.name = 'You' if player.name.empty?
     end
