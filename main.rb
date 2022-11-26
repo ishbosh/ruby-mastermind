@@ -122,7 +122,7 @@ module MasterMind
   class Player
     include DisplayText
 
-    attr_accessor :role, :name
+    attr_accessor :role, :name, :guesses
     
     def initialize
       @name = 'You'
@@ -166,7 +166,7 @@ module MasterMind
   class Computer
     include DisplayText
 
-    attr_accessor :guess
+    attr_accessor :guess, :guesses
 
     def initialize
       @name = 'Computer'
