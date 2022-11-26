@@ -33,7 +33,7 @@ module DisplayText
     "#{feedback.join}"
   end
 
-  def show_game_over(code)
+  def show_game_over(code, breaker)
     "Game over man, game over! You couldn't crack the code! It was: #{code}"
   end
 
