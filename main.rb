@@ -73,7 +73,7 @@ module MasterMind
         self.guess = breaker.guess(feedback) if breaker == @computer
         break if correct?(guess)
         
-        feedback = feedback(compare_to_code(guess))
+        feedback = feedback(*compare_to_code(guess))
         puts 'Guess Feedback: ' + show_feedback(feedback)
       end
     end
