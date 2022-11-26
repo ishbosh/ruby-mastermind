@@ -7,7 +7,7 @@ module MasterMind
   class Game
     include DisplayText
 
-    attr_reader :computer, :player, :code
+    attr_reader :computer, :player, :maker, :breaker, :code
     attr_accessor :guess
 
     def initialize
@@ -15,33 +15,73 @@ module MasterMind
       @computer = Computer.new
       game_setup
     end
-    
-    def intro
-      puts show_intro
-      puts show_intro_prompt
-      decision = player.intro_input
-    end
-
-    def game_setup
-      @code = computer.generate_code.freeze
-      @guess = ''
-      play
-    end
 
     def play
+      intro
+      game_setup
       game_loop
     end
     
+    def intro
+      puts show_intro
+    end
+
+    def game_setup
+      define_roles
+      reset_guesses
+      create_code
+    end
+
+    def player_name
+      player.name = gets.chomp
+    end
+
+    def define_roles
+      puts show_role_prompt
+      player.role = player.role_input
+      if player.role == 'break'
+        @breaker = @player
+        @maker = @computer
+      elsif player.role == 'make'
+        @breaker = @computer
+        @maker = @player
+      end
+    end
+
+    def reset_guess
+      @guess = ''
+      @breaker.guesses = 12
+    end
+
+    def create_code
+      if player.role == 'break'
+        @code = computer.generate_code.freeze
+      elsif player.role == 'make'
+        @code = player.generate_code.freeze
+      end
+    end
+    
     def game_loop
-      until player.guesses == 0
-        self.guess = player.guess
+      feedback = nil
+      until breaker.guesses == 0
+        self.guess = breaker.guess if breaker == @player
+        self.guess = breaker.guess(feedback) if breaker == @computer
         break if correct?(guess)
         
-        correct, misplaced = compare_to_code(guess)
-        puts 'Guess Feedback: ' + show_feedback(feedback(correct, misplaced))
-        game_over if player.guesses == 0
+        feedback = feedback(compare_to_code(guess))
+        puts 'Guess Feedback: ' + show_feedback(feedback)
+        game_over if breaker.guesses == 0
       end
       puts show_victory(code) if correct?(guess)
+    end
+
+    def game_result
+      game_over if breaker.guesses == 0
+      victory if correct?(guess)
+    end
+
+    def victory
+      puts show_victory(code)
     end
 
     def game_over
@@ -80,11 +120,12 @@ module MasterMind
   class Player
     include DisplayText
 
-    attr_accessor :guesses
+    attr_accessor :role, :name
     
     def initialize
+      @name = 'You'
       @guesses = 12
-      @role = ['break']
+      @role = 'break'
     end
 
     def guess
@@ -105,14 +146,14 @@ module MasterMind
       input
     end
 
-    def intro_input
+    def role_input
       valid_answers = ['break', 'make']
       input = 'break'
       loop do
         input = gets.chomp.downcase
         break if valid_answers.include?(input)
 
-        puts show_intro_error
+        puts show_role_error
       end
       input
     end
@@ -120,6 +161,42 @@ module MasterMind
   end
 
   class Computer
+    include DisplayText
+
+    attr_accessor :guess
+
+    def initialize
+      @name = 'Computer'
+      @guesses = 12
+      @guess = ''
+    end
+    
+    def guess(feedback)
+      puts show_guess_number(guesses)
+      if feedback
+        @guess = guess_using_feedback(feedback)
+      else 
+        @guess = guess_randomly
+      end
+      self.guesses -= 1
+      @guess
+    end
+
+    def guess_randomly
+      output = ''
+      4.times {output += rand(1..6).to_s} 
+      output
+    end
+
+    def guess_using_feedback(feedback)
+      output = ''
+      feedback.chars.each_with_index do |n, i|
+        output[i] = rand(1..6) if n == '-'
+        output[i] = guess[i] if n == 'o'
+        output[i] = guess.each_char.map(&:to_i).sample.to_s if n == 'x'
+      end
+      output
+    end
 
     def generate_code
       code = ''

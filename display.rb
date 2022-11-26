@@ -5,11 +5,11 @@ module DisplayText
     " Can you crack the code?"
   end
 
-  def show_intro_prompt
+  def show_role_prompt
     "Do you want to be Code Breaker, or Code Maker? Type in 'Break' or 'Make'."
   end
 
-  def show_intro_error
+  def show_role_error
     "Invalid input. Enter 'break' or 'make'. "
   end
 
@@ -30,10 +30,10 @@ module DisplayText
   end
 
   def show_game_over(code)
-    "Game over man, game over! You couldn't crack the code! It was #{code}"
+    "Game over man, game over! You couldn't crack the code! It was: #{code}"
   end
 
-  def show_victory(code)
-    "You did it! The code was: #{code}"
+  def show_victory(code, breaker)
+    "#{breaker} successfully cracked the code! It was: #{code}"
   end
 end
