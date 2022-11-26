@@ -6,7 +6,7 @@ module DisplayText
   end
 
   def show_role_prompt
-    "Do you want to be Code Breaker, or Code Maker? Type in 'Break' or 'Make'."
+    "Do you want to be Code Breaker, or Code Maker? Type in 'Break' or 'Make':"
   end
 
   def show_role_error

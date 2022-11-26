@@ -4,6 +4,7 @@ require_relative 'display'
 # MasterMind Game
 module MasterMind
   
+  # - Game - #
   class Game
     include DisplayText
 
@@ -13,13 +14,14 @@ module MasterMind
     def initialize
       @player = Player.new
       @computer = Computer.new
-      game_setup
+      play
     end
 
     def play
       intro
       game_setup
       game_loop
+      game_result
     end
     
     def intro
@@ -72,9 +74,7 @@ module MasterMind
         
         feedback = feedback(compare_to_code(guess))
         puts 'Guess Feedback: ' + show_feedback(feedback)
-        game_over if breaker.guesses == 0
       end
-      puts show_victory(code) if correct?(guess)
     end
 
     def game_result
@@ -90,6 +90,15 @@ module MasterMind
       puts show_game_over(code, breaker.name)
     end
 
+    def compare_to_code(guess)
+      code_array = code.chars.each_with_index.to_a
+      guess_array = guess.chars.each_with_index.to_a
+      total_correct = code.chars.intersection(guess.chars).count
+      correct = guess_array & code_array
+      misplaced_count = total_correct - correct.count
+      [correct.count, misplaced_count]
+    end
+
     def feedback(correct_count, misplaced_count, feedback = ['-','-','-','-'])
       feedback.each_with_index do |val, i|
         if correct_count > 0
@@ -103,22 +112,12 @@ module MasterMind
       feedback
     end
 
-    def compare_to_code(guess)
-      code_array = code.chars.each_with_index.to_a
-      guess_array = guess.chars.each_with_index.to_a
-      total_correct = code.chars.intersection(guess.chars).count
-      correct = guess_array & code_array
-      misplaced_count = total_correct - correct.count
-      [correct.count, misplaced_count]
-    end
-
     def correct?(guess)
       code.eql?(guess)
     end
-
-
   end
 
+  # - Player - #
   class Player
     include DisplayText
 
@@ -131,7 +130,7 @@ module MasterMind
     end
 
     def guess
-      show_guess_number(guesses)
+      puts show_guess_number(guesses)
       self.guesses -= 1
       guess = guess_input
     end
@@ -162,6 +161,7 @@ module MasterMind
 
   end
 
+  # - Computer - #
   class Computer
     include DisplayText
 
